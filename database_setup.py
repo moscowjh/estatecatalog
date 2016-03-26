@@ -13,12 +13,21 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(INTEGER, primary_key=True)
+    name = Column(TEXT, nullable=False)
+    email = Column(TEXT, nullable=False)
+    picture = Column(TEXT, nullable=False)
 
 class Category(Base):
     __tablename__ = 'category'
 
     id = Column(INTEGER, primary_key=True)
     name = Column(TEXT, nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
 
 class Items(Base):
@@ -32,6 +41,8 @@ class Items(Base):
     disposition = Column(TEXT, nullable=True)
     image = Column(TEXT, nullable=True)
     category_id = Column(INTEGER, ForeignKey('category.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
 
 engine = create_engine('postgresql:///estatecatalog')
