@@ -3,11 +3,22 @@ from flask import Flask, render_template, request, redirect, \
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Items
+from database_setup import Base, Category, Items, User
+from flask import session as login_session
+import random
+import string
+
+# IMPORTS FOR  OAUTH
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2
+import json
+from flask import make_response
+import requests
 
 app = Flask(__name__)
 
-
+# Connect to Database and create database session
 engine = create_engine('postgresql:///estatecatalog')
 Base.metadata.bind = engine
 
