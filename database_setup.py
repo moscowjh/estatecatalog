@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, Sequence, String
 from sqlalchemy.dialects.postgresql import INTEGER, TEXT
 """    ARRAY, BIGINT, BIT, BOOLEAN, BYTEA, CHAR, CIDR, DATE, \
     DOUBLE_PRECISION, ENUM, FLOAT, HSTORE, INET, INTEGER, \
@@ -13,20 +13,22 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
-class User(Base):
-    __tablename__ = 'user'
+
+class Users(Base):
+    __tablename__ = 'users'
 
     id = Column(INTEGER, primary_key=True)
     name = Column(TEXT, nullable=False)
     email = Column(TEXT, nullable=False)
     picture = Column(TEXT, nullable=False)
 
-class Category(Base):
-    __tablename__ = 'category'
+
+class Categories(Base):
+    __tablename__ = 'categories'
 
     id = Column(INTEGER, primary_key=True)
     name = Column(TEXT, nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
 
 class Items(Base):
@@ -39,10 +41,9 @@ class Items(Base):
     quantity = Column(INTEGER, nullable=True)
     disposition = Column(TEXT, nullable=True)
     image = Column(TEXT, nullable=True)
-    category_id = Column(INTEGER, ForeignKey('category.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
+    category_id = Column(INTEGER, ForeignKey('categories.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
 engine = create_engine('postgresql:///estatecatalog')
-
 
 Base.metadata.create_all(engine)

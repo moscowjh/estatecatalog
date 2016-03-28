@@ -5,13 +5,14 @@
 
 /*
 \c estatecatalog;
-DROP TABLE IF EXISTS category CASCADE;
+DROP TABLE IF EXISTS user CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS items CASCADE;
 */
 /*
--- create tables `category` and `items`
+-- create tables `categories` and `items`
 
-CREATE TABLE category (id serial primary key, name text);
+CREATE TABLE categories (id serial primary key, name text);
 
 CREATE TABLE items (
   id serial primary key,
@@ -21,7 +22,7 @@ CREATE TABLE items (
   quantity int,
   disposition text,
   image text,
-  category_id int REFERENCES category(id)
+  categories_id int REFERENCES categories(id)
   ON DELETE CASCADE
 );
 */
@@ -50,24 +51,30 @@ CREATE VIEW pairings AS
 */
 -- Insert statements below are run to populate the database for testing
 
-INSERT INTO category VALUES (default,'Furniture');
-INSERT INTO category VALUES (default,'Kitchen Items');
-INSERT INTO category VALUES (default,'Bedding & Linens');
-INSERT INTO category VALUES (default,'Artwork & Decorations');
-INSERT INTO category VALUES (default,'Lighting');
-INSERT INTO category VALUES (default,'AudioVisual & Electronics');
-INSERT INTO category VALUES (default,'Other');
+INSERT INTO users VALUES (default,'Jason Horowitz','horowitz.jason@gmail.com', 'none');
+INSERT INTO users VALUES (default,'Anouche Mardirossian','mardir0ssian.anouche@gmail.com', 'none');
+INSERT INTO users VALUES (default,'Monica Horowitz','monicatamar93@gmail.com', 'none');
+INSERT INTO users VALUES (default,'Maksim Horowitz','bklynmaks@gmail.com', 'none');
 
 
-INSERT INTO items VALUES (default,'Queen Bed','Bed',0, 1, 'JH', 'none', 1);
-INSERT INTO items VALUES (default,'Desk','Blue room',100, 1, 'MAH','none', 1);
-INSERT INTO items VALUES (default,'Casserole','Copper',0, 1, 'AM','none', 2);
-INSERT INTO items VALUES (default,'Painting','Squid',0, 1, 'MTH','none', 4);
-INSERT INTO items VALUES (default,'Knicks Lamps','Orange, Blue', 50, 2, 'JH', 'none', 5);
-INSERT INTO items VALUES (default,'Sonos','6 speakers & bridge', 400, 6, 'Sell', 'none', 6);
+INSERT INTO categories VALUES (default,'Furniture');
+INSERT INTO categories VALUES (default,'Kitchen Items');
+INSERT INTO categories VALUES (default,'Bedding & Linens');
+INSERT INTO categories VALUES (default,'Artwork & Decorations');
+INSERT INTO categories VALUES (default,'Lighting');
+INSERT INTO categories VALUES (default,'AudioVisual & Electronics');
+INSERT INTO categories VALUES (default,'Other');
+
+
+INSERT INTO items VALUES (default,'Queen Bed','Bed',0, 1, 'JH', 'none', 1, 1);
+INSERT INTO items VALUES (default,'Desk','Blue room',100, 1, 'MAH','none', 1, 2);
+INSERT INTO items VALUES (default,'Casserole','Copper',0, 1, 'AM','none', 2, 3);
+INSERT INTO items VALUES (default,'Painting','Squid',0, 1, 'MTH','none', 4, 2);
+INSERT INTO items VALUES (default,'Knicks Lamps','Orange, Blue', 50, 2, 'JH', 'none', 5, 4);
+INSERT INTO items VALUES (default,'Sonos','6 speakers & bridge', 400, 6, 'Sell', 'none', 6, 4);
 INSERT INTO items VALUES (default,'Russian Books','Moscow & SPB', 0, 50, 'Donate', 'none', 7);
-INSERT INTO items VALUES (default,'French Press','Moscow & SPB', 0, 1, 'AM', 'none', 2);
-INSERT INTO items VALUES (default,'Queen sheets','Soft', 20, 1, 'Donate', 'none', 3);
+INSERT INTO items VALUES (default,'French Press','Moscow & SPB', 0, 1, 'AM', 'none', 2, 3);
+INSERT INTO items VALUES (default,'Queen sheets','Soft', 20, 1, 'Donate', 'none', 3, 2);
 
 
 /* following views  - `win_count`, `matches_played`, and 'standings' are an
