@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, \
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Items, User
+from database_setup import Base, Categories, Items, Users
 from flask import session as login_session
 import random
 import string
@@ -46,14 +46,14 @@ def menuItemJSON(restaurant_id, menu_id):
 @app.route('/')
 @app.route('/estatecatalog/')
 def showCategories():
-    categories = session.query(Category).all()
+    categories = session.query(Categories).all()
     return render_template('categories.html', categories=categories)
 
 
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
     if request.method == 'POST':
-        newItem = Category(
+        newItem = Categories(
             name=request.form['name'])
         session.add(newItem)
         session.commit()
@@ -64,9 +64,22 @@ def newCategory():
     # return "This page will be for creating a new category"
 
 
-@app.route('/category/<int:category_id>/edit/')
+@app.route('/category/<int:category_id>/edit/', methods=['GET', 'POST'])
 def editCategory(category_id):
-    return "This page will be for editing category %s" % category_id
+    # return "This page will be for editing category %s" % category_id
+    """if 'username' not in login_session:
+        return redirect('/login')"""
+    editedCategory=session.query(Categories).filter_by(id = category_id).one()
+    # if editedRestaurant.user_id != login_session['user_id']:
+        # return "<script>function myFunction() {alert('You are not authorized to edit this restaurant. Please create your own restaurant in order to edit.');}</script><body onload='myFunction()''>"
+    if request.method == 'POST':
+        if request.form['name']:
+            editedCategory.name = request.form['name']
+            flash('Category Successfully Edited %s' % editedCategory.name)
+            return redirect(url_for('showCategories'))
+    else:
+        return render_template('editCategory.html', category = editedCategory)
+
 
 
 @app.route('/category/<int:category_id>/delete/')
