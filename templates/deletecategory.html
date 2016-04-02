@@ -1,0 +1,30 @@
+<html>
+<head>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+<body>
+<h3> Are you sure you want to delete {{category.name}}? </h3>
+
+<form action="{{ url_for('deleteCategory',category_id=category_id,
+               category=categoryToDelete)}}" method = 'post'>
+
+<input type='submit', value = 'Delete'>
+
+<!--MESSAGE FLASHING EXAMPLE -->
+		{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<ul>
+{% for message in messages %}
+	<li><strong>{{message}}</strong></li>
+		{% endfor %}
+</ul>
+		{% endif %}
+{% endwith %}
+
+</form>
+
+<a href = '{{url_for('showCategories')}}'> Cancel </a>
+</body>
+
+</html>
