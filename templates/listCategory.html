@@ -1,0 +1,42 @@
+
+<html>
+
+<head>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<h1>{{category.name}}</h1>
+
+<!--MESSAGE FLASHING EXAMPLE -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<ul>
+{% for message in messages %}
+  <li><strong>{{message}}</strong></li>
+  {% endfor %}
+</ul>
+{% endif %}
+<!-- {% endwith %} -->
+
+{% for i in items %}
+
+<div>
+<ul>
+<li>{{i.name}}</li>
+
+<li>{{i.description}}</li>
+
+<li> {{i.value}} </li>
+
+</br>
+
+</div>
+
+
+{% endfor %}
+</body>
+
+</html>

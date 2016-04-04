@@ -100,7 +100,10 @@ def deleteCategory(category_id):
 @app.route('/category/<int:category_id>/')
 @app.route('/category/<int:category_id>/list/')
 def listCategory(category_id):
-    return "This page will list out all items in the category %s" % category_id
+    category = session.query(Categories).filter_by(id=category_id).one()
+    items = session.query(Items).filter_by(category_id=category_id)
+    return render_template('listCategory.html', category=category, items=items)
+    # return "This page will list out all items in the category %s" % category_id
 
 
 @app.route('/category/<int:category_id>/new')
