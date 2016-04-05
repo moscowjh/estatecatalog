@@ -103,17 +103,44 @@ def listCategory(category_id):
     category = session.query(Categories).filter_by(id=category_id).one()
     items = session.query(Items).filter_by(category_id=category_id)
     return render_template('listCategory.html', category=category, items=items)
-    # return "This page will list out all items in the category %s" % category_id
 
 
-@app.route('/category/<int:category_id>/new')
+@app.route('/category/<int:category_id>/new', methods=['GET', 'POST'])
 def newItem(category_id):
-    return "This page is for creating a new item in the category %s" % category_id
+    if request.method == 'POST':
+        newItem = Items(
+            name=request.form['name'], description=request.form['description'],
+            value=request.form['value'], quantity=request.form['quantity'],
+            category_id=category_id)
+        session.add(newItem)
+        session.commit()
+        flash("new item created!")
+        return redirect(url_for('listCategory', category_id=category_id))
+    else:
+        return render_template('newitem.html', category_id=category_id)
 
 
-@app.route('/category/<int:category_id>/<int:item_id>/edit/')
+@app.route('/category/<int:category_id>/<int:item_id>/edit/', methods=['GET',
+           'POST'])
 def editItem(category_id, item_id):
-    return "This page will be for editing item %s in category %s" % (item_id, category_id)
+    editedItem = session.query(Items).filter_by(id=item_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            editedItem.name = request.form['name']
+        if request.form['description']:
+            editedItem.description = request.form['description']
+        if request.form['value']:
+            editedItem.value = request.form['value']
+        if request.form['quantity']:
+            editedItem.quantity = request.form['quantity']
+        session.add(editedItem)
+        session.commit()
+        flash("item has been edited!")
+        return redirect(url_for('listCategory', category_id=category_id))
+    else:
+        return render_template(
+            'edititem.html', category_id=category_id, item_id=item_id,
+            item=editedItem)
 
 
 @app.route('/category/<int:category_id>/<int:item_id>/delete/')
