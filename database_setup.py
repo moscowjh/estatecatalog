@@ -44,6 +44,19 @@ class Items(Base):
     category_id = Column(INTEGER, ForeignKey('categories.id'))
     user_id = Column(Integer, ForeignKey('users.id'))
 
+    """Return object data in easily serializeable format"""
+    @property
+    def serialize(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'id': self.id,
+            'value': self.value,
+            'quantity': self.quantity,
+            'disposition': self.disposition,
+            }
+
+
 engine = create_engine('postgresql:///estatecatalog')
 
 Base.metadata.create_all(engine)

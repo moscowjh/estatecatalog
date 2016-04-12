@@ -1,0 +1,26 @@
+<html>
+<head>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+<body>
+
+{% for item in items %}
+
+<div class = 'pane'>
+<form action="{{ url_for('dispositionItems', disposition='dispo')}}" method = 'post' onsubmit =''>
+
+<dl>
+     <dt>Items Belonging to:</dt>
+         <dd><input type="radio" name= "dispo" id= "dispoX" value="{{item.disposition}}">{{item.disposition}}</input></dd>
+
+{% endfor %}
+</dl>
+
+<input type="submit" value="Submit">
+
+</form>
+</div>
+
+</body>
+
+</html>

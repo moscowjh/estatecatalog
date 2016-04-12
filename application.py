@@ -27,16 +27,15 @@ session = DBSession()
 
 
 # Making an API endpoint (GET request)
-# Restaurant Menu JSON
-"""@app.route('/restaurants/<int:restaurant_id>/menu/JSON')
-def restaurantMenuJSON(restaurant_id):
-    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
-    items = session.query(MenuItem).filter_by(
-        restaurant_id=restaurant_id).all()
-    return jsonify(MenuItems=[i.serialize for i in items])
+# Category Items JSON
+@app.route('/category/<int:category_id>/JSON')
+def categoryListJSON(category_id):
+    category = session.query(Categories).filter_by(id=category_id).one()
+    items = session.query(Items).filter_by(category_id=category_id)
+    return jsonify(categoryList=[i.serialize for i in items])
 
 
-# Menu Item JSON
+"""# Menu Item JSON
 @app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON')
 def menuItemJSON(restaurant_id, menu_id):
     menuItem = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -61,7 +60,6 @@ def newCategory():
         return redirect(url_for('showCategories'))
     else:
         return render_template('newcategory.html')
-    # return "This page will be for creating a new category"
 
 
 @app.route('/category/<int:category_id>/edit/', methods=['GET', 'POST'])
@@ -143,15 +141,30 @@ def editItem(category_id, item_id):
             item=editedItem)
 
 
-@app.route('/category/<int:category_id>/<int:item_id>/delete/')
+@app.route('/category/<int:category_id>/<int:item_id>/delete/', methods=['GET',
+           'POST'])
 def deleteItem(category_id, item_id):
-    return "This page will be for deleting item %s in category %s" % (item_id, category_id)
+    deletedItem = session.query(Items).filter_by(id=item_id).one()
+    if request.method == 'POST':
+        session.delete(deletedItem)
+        session.commit()
+        flash("menu item has been deleted!")
+        return redirect(url_for('listCategory', category_id=category_id))
+    else:
+        return render_template(
+            'deleteitem.html', category_id=category_id, item_id=item_id,
+            item=deletedItem)
 
 
-@app.route('/disposition/jhh/')
-@app.route('/disposition/jhh/list/')
-def jhhItems():
-    return "This page is for displaying all items marked for disposition to jhh."
+@app.route('/disposition/', methods=['GET', 'POST'])
+def dispositionItems():
+    if request.method == 'POST':
+        Dispo = request.form['dispo'].strip()
+        dispo = session.query(Items).filter_by(disposition=Dispo).all()
+        return render_template('dispositionList.html', items=dispo)
+    else:
+        dispositionList = session.query(Items).all()
+        return render_template('disposition.html', items=dispositionList)
 
 
 @app.route('/disposition/am/')
