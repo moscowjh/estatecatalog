@@ -8,8 +8,8 @@
 DROP TABLE IF EXISTS user CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS items CASCADE;
-*/
-/*
+
+/
 -- create tables `categories` and `items`
 
 CREATE TABLE categories (id serial primary key, name text);
