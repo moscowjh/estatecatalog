@@ -1,3 +1,5 @@
+Test small change #1 10/31/16.
+
 Catalog project underway as 'estatecatalog'
 
 Flask routing - URLs for pages in web app complete.
